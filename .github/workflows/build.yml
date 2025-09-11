@@ -163,6 +163,41 @@ jobs:
 
       # These `if` statements are so that pull requests for your custom images do not make it publish any packages under your name without you knowing
       # They also check if the runner is on the default branch so that things like the merge queue (if you enable it), are going to work
+
+      - name: Create Manifest
+        if: ${{ inputs.publish }}
+        id: create-manifest
+        env:
+          IMAGE_REGISTRY: ${{ env.IMAGE_REGISTRY }}
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+        run: |
+          podman manifest create ${IMAGE_REGISTRY}/${IMAGE_NAME}
+          echo "MANIFEST=${IMAGE_REGISTRY}/${IMAGE_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Populate Manifest
+        if: ${{ inputs.publish }}
+        env:
+          MANIFEST: ${{ steps.create-manifest.outputs.MANIFEST }}
+          DIGESTS_JSON: ${{ steps.load-outputs.outputs.DIGESTS_JSON }}
+          LABELS: ${{ steps.metadata.outputs.labels }}
+          PLATFORMS: "${{ inputs.platforms }}"
+        run: |
+          DIGESTS=$(echo "$DIGESTS_JSON" | jq -c '.')
+          # turn the comma separated string into a list
+          platforms=()
+          IFS=',' read -r -a platforms <<< "${PLATFORMS}"
+          for platform in ${platforms[@]}; do
+            digest="$(echo $DIGESTS | jq -r ".$platform")"
+            echo "Adding ${IMAGE_REGISTRY}/${IMAGE_NAME}@${digest} for ${platform}"
+            podman manifest add "${MANIFEST}" "${IMAGE_REGISTRY}/${IMAGE_NAME}@${digest}" --arch "${platform}"
+          done
+
+          # Apply the labels to the manifest (separated by newlines)
+          while IFS= read -r label; do
+            echo "Applying label ${label} to manifest"
+            podman manifest annotate --index --annotation "$label" "${MANIFEST}"
+          done <<< "${LABELS}"
+
       - name: Login to GitHub Container Registry
         uses: docker/login-action@184bdaa0721073962dff0199f1fb9940f07167d1 # v3
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
