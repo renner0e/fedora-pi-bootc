@@ -2,23 +2,79 @@
 
 set -ouex pipefail
 
-### Install packages
+sed -i "s/enabled=1/enabled=0/" /etc/yum.repos.d/fedora-cisco-openh264.repo
 
-# Packages can be installed from any enabled yum repo on the image.
-# RPMfusion repos are available by default in ublue main images
-# List of rpmfusion packages can be found here:
-# https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/39/x86_64/repoview/index.html&protocol=https&redirect=1
+dnf -y install dnf5-plugins
 
-# this installs a package from fedora repos
-dnf5 install -y tmux 
+dnf config-manager addrepo --from-repofile=https://pkgs.tailscale.com/stable/fedora/tailscale.repo
+dnf5 -y copr enable ublue-os/packages
 
-# Use a COPR Example:
-#
-# dnf5 -y copr enable ublue-os/staging
-# dnf5 -y install package
-# Disable COPRs so they don't end up enabled on the final image:
-# dnf5 -y copr disable ublue-os/staging
+dnf -y remove \
+  vim-minimal
 
-#### Example for enabling a System Unit File
+dnf -y install \
+  NetworkManager-wifi \
+  borgbackup \
+  btop \
+  cockpit \
+  cockpit-bridge \
+  cockpit-navigator \
+  cockpit-networkmanager \
+  cockpit-podman \
+  cockpit-selinux \
+  cockpit-storaged \
+  cockpit-system \
+  cockpit-ws \
+  distrobox \
+  fastfetch \
+  fzf \
+  git \
+  greenboot \
+  greenboot-default-health-checks \
+  hdparm \
+  htop \
+  iwd \
+  just \
+  lshw \
+  man-db \
+  man-pages \
+  neovim \
+  net-tools \
+  ntfs-3g \
+  ntfsprogs \
+  nvme-cli \
+  rclone \
+  samba \
+  samba-usershares \
+  slirp4netns \
+  smartmontools \
+  speedtest-cli \
+  systemd-container \
+  tailscale \
+  tldr \
+  tmux \
+  traceroute \
+  tree \
+  ublue-brew \
+  usbutils \
+  wget \
+  wireguard-tools \
+  zram-generator-defaults \
+  zsh \
+  zsh-autosuggestions \
+  zsh-syntax-highlighting \
+  zstd
 
-systemctl enable podman.socket
+ln -s /usr/bin/nvim /usr/bin/vim
+ln -s /usr/bin/nvim /usr/bin/vi
+
+systemctl enable brew-setup.service
+systemctl enable brew-upgrade.timer
+systemctl enable brew-update.timer
+
+
+# Enable systemd services
+# activate podman timer for root user
+# activate podman auto update for all normal users
+systemctl enable podman-auto-update.timer
+systemctl --global enable podman-auto-update.timer

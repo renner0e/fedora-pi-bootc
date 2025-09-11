@@ -1,0 +1,23 @@
+#!/bin/sh
+
+set -ouex pipefail
+
+DUCKDNS_ENV="/etc/duckdns/duckdns.env"
+
+# source .env file
+source $DUCKDNS_ENV
+
+# Check if DUCKDNS_TOKEN is set
+# Abort Script if no token
+if [ -z "${DUCKDNS_TOKEN}" ]; then
+    echo "Error: no token specified."
+    exit 1
+else
+    echo "Updating for: ${DUCKDNS_DOMAIN}"
+fi
+
+
+IPV4_ADDR=$(curl -s https://api4.ipify.org)
+IPV6_ADDR=$(curl -s https://api6.ipify.org)
+
+curl -s "https://www.duckdns.org/update?domains={$DUCKDNS_DOMAIN}&token={$DUCKDNS_TOKEN}&ip={$IPV4_ADDR}"

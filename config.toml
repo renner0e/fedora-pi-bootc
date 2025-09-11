@@ -1,0 +1,5 @@
+[[customizations.user]]
+name = "username"
+password = "output of openssl passwd -6"
+key = "ssh-rsa AAAAB3N"
+groups = ["wheel"]
