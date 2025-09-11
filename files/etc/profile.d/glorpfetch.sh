@@ -1,1 +1,1 @@
-glorpfetch="/usr/bin/fastfetch --logo /etc/fastfetch/glorp.txt"
+alias glorpfetch="/usr/bin/fastfetch --logo /etc/fastfetch/glorp.txt"
