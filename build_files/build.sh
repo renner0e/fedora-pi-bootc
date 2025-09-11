@@ -13,18 +13,8 @@ dnf -y remove \
   vim-minimal
 
 dnf -y install \
-  NetworkManager-wifi \
   borgbackup \
   btop \
-  cockpit \
-  cockpit-bridge \
-  cockpit-navigator \
-  cockpit-networkmanager \
-  cockpit-podman \
-  cockpit-selinux \
-  cockpit-storaged \
-  cockpit-system \
-  cockpit-ws \
   distrobox \
   fastfetch \
   fzf \
@@ -39,10 +29,6 @@ dnf -y install \
   man-db \
   man-pages \
   neovim \
-  net-tools \
-  ntfs-3g \
-  ntfsprogs \
-  nvme-cli \
   rclone \
   samba \
   samba-usershares \
@@ -55,15 +41,13 @@ dnf -y install \
   tmux \
   traceroute \
   tree \
-  ublue-brew \
   usbutils \
   wget \
   wireguard-tools \
   zram-generator-defaults \
   zsh \
   zsh-autosuggestions \
-  zsh-syntax-highlighting \
-  zstd
+  zsh-syntax-highlighting
 
 ln -s /usr/bin/nvim /usr/bin/vim
 ln -s /usr/bin/nvim /usr/bin/vi
