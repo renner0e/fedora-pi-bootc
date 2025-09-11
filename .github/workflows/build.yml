@@ -77,7 +77,10 @@ jobs:
       #     remove-codeql: true
 
       - name: Mount BTRFS for podman storage
-        uses: ublue-os/container-storage-action@main
+        if: ${{ matrix.platform != 'arm64' }}
+        uses: ublue-os/container-storage-action@911baca08baf30c8654933e9e9723cb399892140
+        with:
+          target-dir: /var/lib/containers
 
       - name: Get current date
         id: date
