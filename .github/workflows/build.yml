@@ -26,16 +26,39 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  generate_matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - id: set-matrix
+        run: |
+          echo 'matrix={
+            "include": [
+              {"platform": "amd64", "runner": "ubuntu-24.04"},
+              {"platform": "arm64", "runner": "ubuntu-24.04-arm"}
+            ]
+          }' >> $GITHUB_OUTPUT
+
   build_push:
     name: Build and push image
-    runs-on: ubuntu-24.04
-
+    needs: generate_matrix
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.generate_matrix.outputs.matrix) }}
     permissions:
       contents: read
       packages: write
       id-token: write
 
     steps:
+      - name: Install dependencies
+        if: matrix.platform == 'arm64'
+        run: |
+          sudo apt update -y
+          sudo apt install -y podman
+
       - name: Prepare environment
         run: |
           # Lowercase the image uri
