@@ -6,7 +6,7 @@ Built upon the work of https://github.com/ondrejbudai/fedora-bootc-raspi
 
 ## Cross build an arm image from x86 (slow af):
 ```bash
-sudo podman build . --arch arm64 -t localhost/fedora-rpi-bootc:latest
+sudo podman build . --arch arm64 -t localhost/fedora-pi-bootc:latest
 ```
 
 Edit `config.toml` to your liking to setup ssh key, password and corresponding user
@@ -29,7 +29,7 @@ sudo podman run \
    --local \
    --target-arch arm64 \
    --rootfs ext4 \
-   localhost/fedora-rpi-bootc:latest
+   localhost/fedora-pi-bootc:latest
 ```
 
 ## arm-image-installer can only do xz archives
