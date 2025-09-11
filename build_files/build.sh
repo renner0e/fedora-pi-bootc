@@ -51,11 +51,6 @@ dnf -y install \
 ln -s /usr/bin/nvim /usr/bin/vim
 ln -s /usr/bin/nvim /usr/bin/vi
 
-systemctl enable brew-setup.service
-systemctl enable brew-upgrade.timer
-systemctl enable brew-update.timer
-
-
 # Enable systemd services
 # activate podman timer for root user
 # activate podman auto update for all normal users
