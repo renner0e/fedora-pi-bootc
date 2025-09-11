@@ -15,7 +15,6 @@ dnf -y remove \
 dnf -y install \
   borgbackup \
   btop \
-  distrobox \
   fastfetch \
   fzf \
   git \
