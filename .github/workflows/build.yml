@@ -26,16 +26,40 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  generate_matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - id: set-matrix
+        run: |
+          MATRIX_JSON=$(jq -c -n '{
+            include: [
+              {platform: "amd64", runner: "ubuntu-24.04"},
+              {platform: "arm64", runner: "ubuntu-24.04-arm"}
+            ]
+          }')
+          echo "matrix=$MATRIX_JSON" >> $GITHUB_OUTPUT
+
   build_push:
     name: Build and push image
-    runs-on: ubuntu-24.04
-
+    needs: generate_matrix
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.generate_matrix.outputs.matrix) }}
     permissions:
       contents: read
       packages: write
       id-token: write
 
     steps:
+      - name: Install dependencies
+        if: matrix.platform == 'arm64'
+        run: |
+          sudo apt update -y
+          sudo apt install -y podman
+
       - name: Prepare environment
         run: |
           # Lowercase the image uri
@@ -53,7 +77,10 @@ jobs:
       #     remove-codeql: true
 
       - name: Mount BTRFS for podman storage
-        uses: ublue-os/container-storage-action@main
+        if: ${{ matrix.platform != 'arm64' }}
+        uses: ublue-os/container-storage-action@911baca08baf30c8654933e9e9723cb399892140
+        with:
+          target-dir: /var/lib/containers
 
       - name: Get current date
         id: date
