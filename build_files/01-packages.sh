@@ -2,6 +2,8 @@
 
 set -ouex pipefail
 
+echo "::group:: Installing Packages"
+
 sed -i "s/enabled=1/enabled=0/" /etc/yum.repos.d/fedora-cisco-openh264.repo
 
 dnf -y install dnf5-plugins
@@ -41,6 +43,7 @@ dnf -y install \
   traceroute \
   tree \
   usbutils \
+  ublue-os-signing \
   wget \
   wireguard-tools \
   zram-generator-defaults \
@@ -48,11 +51,5 @@ dnf -y install \
   zsh-autosuggestions \
   zsh-syntax-highlighting
 
-ln -s /usr/bin/nvim /usr/bin/vim
-ln -s /usr/bin/nvim /usr/bin/vi
+echo "::endgroup::"
 
-# Enable systemd services
-# activate podman timer for root user
-# activate podman auto update for all normal users
-systemctl enable podman-auto-update.timer
-systemctl --global enable podman-auto-update.timer
