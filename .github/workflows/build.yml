@@ -169,7 +169,7 @@ jobs:
           # Apply the labels to the manifest (separated by newlines)
           while IFS= read -r label; do
             echo "Applying label ${label} to manifest"
-            podman manifest annotate --index --annotation "$label" "${MANIFEST}"
+            podman manifest annotate --annotation "$label" "${MANIFEST}"
           done <<< "${LABELS}"
 
       - name: Push To GHCR
