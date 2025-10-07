@@ -34,4 +34,4 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     ostree container commit
 
 # Verify final image and contents are correct.
-RUN bootc container lint --fatal-warnings || true
+RUN bootc container lint

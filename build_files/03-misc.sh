@@ -5,6 +5,9 @@ set -ouex pipefail
 # append my cosign key to the ublue config file
 jq '.transports.docker["ghcr.io/renner0e"] = [{"type":"sigstoreSigned","keyPaths":["/etc/pki/containers/renner.pub","/etc/pki/containers/renner.pub"],"signedIdentity":{"type":"matchRepository"}}]' /usr/etc/containers/policy.json > /etc/containers/policy.json
 
+# Replace podman provided policy.json with ublue-os one.
+mv /usr/etc/containers/policy.json /etc/containers/policy.json
+
 ln -s /usr/bin/nvim /usr/bin/vim
 ln -s /usr/bin/nvim /usr/bin/vi
 
