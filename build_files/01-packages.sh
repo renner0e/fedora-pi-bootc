@@ -31,8 +31,6 @@ dnf -y install \
   man-pages \
   neovim \
   rclone \
-  samba \
-  samba-usershares \
   slirp4netns \
   smartmontools \
   speedtest-cli \
