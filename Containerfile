@@ -5,8 +5,8 @@ COPY build_files /
 # Base Image
 FROM quay.io/fedora/fedora-bootc:42
 
-ADD files/usr /usr
-ADD files/etc /etc
+COPY files/usr /usr
+COPY files/etc /etc
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
@@ -24,14 +24,19 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
-    /ctx/03-misc.sh
+    /ctx/03-kernel.sh
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
-    /ctx/10-cleanup.sh && \
-    ostree container commit
+    /ctx/04-misc.sh
+
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    /ctx/10-cleanup.sh
 
 # Verify final image and contents are correct.
-RUN bootc container lint --fatal-warnings || true
+RUN bootc container lint
