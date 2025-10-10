@@ -97,10 +97,13 @@ jobs:
       - name: Rechunk
         id: rechunk
         run: |
-          rpm-ostree compose build-chunked-oci \
-          --bootc --format-version=2 \
-          --from=ghcr.io/renner0e/diffuse:latest \
-          --output containers-storage:ghcr.io/renner0e/diffuse:latest
+          docker run --rm \
+                -v /var/lib/containers:/var/lib/containers \
+                quay.io/fedora/fedora-bootc:latest \
+                rpm-ostree compose build-chunked-oci \
+                  --bootc --format-version=2 \
+                  --from=ghcr.io/renner0e/diffuse:latest \
+                  --output containers-storage:ghcr.io/renner0e/diffuse:latest
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef
