@@ -3,7 +3,7 @@ FROM scratch AS ctx
 COPY build_files /
 
 # Base Image
-FROM quay.io/fedora/fedora-bootc:42
+FROM quay.io/fedora/fedora-bootc:43
 
 ADD files/usr /usr
 ADD files/etc /etc
