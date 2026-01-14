@@ -11,7 +11,6 @@ sed -i "s/enabled=1/enabled=0/" /etc/yum.repos.d/fedora-cisco-openh264.repo
 dnf -y install dnf5-plugins
 
 dnf config-manager addrepo --from-repofile=https://pkgs.tailscale.com/stable/fedora/tailscale.repo
-dnf5 -y copr enable ublue-os/packages
 
 dnf -y remove \
   vim-minimal
@@ -31,25 +30,38 @@ dnf -y install \
   lshw \
   man-db \
   man-pages \
-  neovim \
+  nvim \
   rclone \
   slirp4netns \
   smartmontools \
-  speedtest-cli \
   systemd-container \
   tailscale \
-  tldr \
   tmux \
   traceroute \
   tree \
   usbutils \
-  ublue-os-signing \
   wget \
   wireguard-tools \
-  zram-generator-defaults \
-  zsh \
-  zsh-autosuggestions \
-  zsh-syntax-highlighting
+  zram-generator-defaults
+
+dnf5 -y remove \
+  adcli \
+  adwaita* \
+  flatpak-session-helper \
+  fwupd* \
+  nano \
+  nfs-utils \
+  nvidia-gpu-firmware \
+  python3-botocore \
+  qemu-user-static \
+  samba* \
+  sssd \
+  toolbox \
+  tpm2-tools \
+  wcurl \
+  xkeyboard-config
+
+rm -rf /usr/share/doc
 
 echo "::endgroup::"
 

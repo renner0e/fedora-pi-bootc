@@ -3,7 +3,6 @@
 set -ouex pipefail
 
 # Disable all COPRs and RPM Fusion Repos and terra
-dnf5 -y copr disable ublue-os/packages
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/tailscale.repo
 
 # Cleanup
