@@ -2,6 +2,8 @@
 
 set -ouex pipefail
 
+cp -avf "/ctx/files"/. /
+
 echo "::group:: Installing Packages"
 
 sed -i "s/enabled=1/enabled=0/" /etc/yum.repos.d/fedora-cisco-openh264.repo
