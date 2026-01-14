@@ -7,4 +7,16 @@ if [ "$(uname -m)" = "aarch64" ]; then
   dnf remove -y bcm2711-firmware uboot-images-armv8
   mkdir /usr/bin/bootupctl-orig
   mv /usr/bin/bootupctl /usr/bin/bootupctl-orig/
+  printf '%s\n' \
+  '#!/usr/bin/bash' \
+  'set -euo pipefail' \
+  '' \
+  '# Restore Raspberry Pi firmware and bootloader files' \
+  'if [ -d /usr/lib/bootc-raspi-firmwares ]; then' \
+  '  cp -a /usr/lib/bootc-raspi-firmwares/. /boot/efi/' \
+  'fi' \
+  '' \
+  '# Chain to the original bootupctl' \
+  'exec /usr/bin/bootupctl-orig/bootupctl "$@"' \
+      > /usr/bin/bootupctl
 fi
