@@ -32,6 +32,7 @@ dnf -y install \
   man-pages \
   nvim \
   rclone \
+  rsync \
   slirp4netns \
   smartmontools \
   systemd-container \
