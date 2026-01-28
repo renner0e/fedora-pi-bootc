@@ -5,6 +5,9 @@ set -ouex pipefail
 # Disable all COPRs and RPM Fusion Repos and terra
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/tailscale.repo
 
+# Revert back to upstream defaults
+dnf config-manager setopt keepcache=0
+
 # Cleanup
 # Remove tmp files and everything in dirs that make bootc unhappy
 rm -rf /tmp/* || true

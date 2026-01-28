@@ -8,14 +8,13 @@ echo "::group:: Installing Packages"
 
 sed -i "s/enabled=1/enabled=0/" /etc/yum.repos.d/fedora-cisco-openh264.repo
 
-dnf -y install dnf5-plugins
+dnf -y install 'dnf5-command(config-manager)'
 
-dnf config-manager addrepo --from-repofile=https://pkgs.tailscale.com/stable/fedora/tailscale.repo
+# Speeds up local builds
+dnf config-manager setopt keepcache=1
 
-dnf -y remove \
-  vim-minimal
 
-dnf -y install \
+dnf -y install --setopt=install_weak_deps=False \
   borgbackup \
   btop \
   fastfetch \
@@ -28,7 +27,6 @@ dnf -y install \
   iwd \
   just \
   lshw \
-  man-db \
   man-pages \
   nvim \
   rclone \
@@ -45,6 +43,10 @@ dnf -y install \
   wireguard-tools \
   zram-generator-defaults
 
+dnf config-manager addrepo --from-repofile=https://pkgs.tailscale.com/stable/fedora/tailscale.repo
+dnf config-manager setopt tailscale-stable.enabled=0
+dnf -y install --enablerepo='tailscale-stable' tailscale
+
 dnf5 -y remove \
   adcli \
   adwaita* \
@@ -59,6 +61,7 @@ dnf5 -y remove \
   sssd \
   toolbox \
   tpm2-tools \
+  vim-minimal \
   wcurl \
   xkeyboard-config
 
