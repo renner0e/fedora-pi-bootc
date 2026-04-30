@@ -3,7 +3,7 @@ FROM scratch AS ctx
 COPY build_files /build
 COPY files /files
 
-FROM quay.io/fedora/fedora-bootc:43
+FROM quay.io/fedora/fedora-bootc:44
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=tmpfs,dst=/var \
