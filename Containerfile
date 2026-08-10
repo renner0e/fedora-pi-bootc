@@ -23,6 +23,8 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     /ctx/build/04-misc.sh
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    /ctx/build/10-cleanup.sh
+    /ctx/build/10-cleanup.sh && \
+    /ctx/build/05-initramfs.sh && \
+    /ctx/build/post.sh
 
-RUN bootc container lint
+RUN bootc container lint --no-truncate --fatal-warnings

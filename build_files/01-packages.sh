@@ -4,15 +4,13 @@ set -ouex pipefail
 
 cp -avf "/ctx/files"/. /
 
-echo "::group:: Installing Packages"
 
 sed -i "s/enabled=1/enabled=0/" /etc/yum.repos.d/fedora-cisco-openh264.repo
 
 dnf -y install 'dnf5-command(config-manager)'
 
-# Speeds up local builds
-dnf config-manager setopt keepcache=1
-
+cp /etc/dnf/dnf.conf /etc/dnf/dnf.conf.bak
+dnf config-manager setopt keepcache=1 timeout=60
 
 dnf -y install --setopt=install_weak_deps=False \
   borgbackup \
@@ -28,11 +26,11 @@ dnf -y install --setopt=install_weak_deps=False \
   just \
   lshw \
   man-pages \
-  nvim \
   rclone \
   rsync \
   slirp4netns \
   smartmontools \
+  systemd-boot-unsigned \
   systemd-container \
   tailscale \
   tmux \
@@ -60,7 +58,6 @@ dnf5 -y remove \
   samba* \
   sssd \
   toolbox \
-  tpm2-tools \
   vim-minimal \
   wcurl \
   xkeyboard-config
