@@ -150,7 +150,7 @@ rechunk $target_image=image_name $tag=default_tag:
       build \
       --verbose \
       --compressed \
-      --max-layers 128 \
+      --max-layers 400 \
       --prune /sysroot/ \
       --label ostree.commit- --label ostree.final-diffid- \
       --config /chunkah-config.json \
